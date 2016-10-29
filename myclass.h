@@ -1,5 +1,7 @@
 #include<string>
 
+#define MAXMSG 2000
+
 class key_t {
     key_t(){};
     key_t(std::string s){key = s};

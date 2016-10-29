@@ -7,7 +7,7 @@ int main(int argc , char *argv[])
 {
     int sock;
     struct sockaddr_in server;
-    char message[1000] , server_reply[2000];
+    char message[MAXMSG], server_reply[MAXMSG];
 
     //Create socket
     sock = socket(AF_INET , SOCK_STREAM , 0);
@@ -29,14 +29,12 @@ int main(int argc , char *argv[])
     }
 
     puts("Connected\n");
-    puts("Bienvenido al Chatroom, puedes empezar a escribir en la sala!");
 
     //keep communicating with server
     while(1)
     {
-
         printf("Enter message: ");
-    fgets(message, sizeof(message),stdin);
+        fgets(message, sizeof(message),stdin);
         //scanf("%s" , message);
 
         //Send some data

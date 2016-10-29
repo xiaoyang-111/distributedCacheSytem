@@ -83,8 +83,8 @@ void *connection_handler(void *socket_desc)
     //Get the socket descriptor
     int sock = *(int*)socket_desc;
     int read_size;
-    char message[1000];
-    char client_message[2000];
+    char message[MAXMSG];
+    char client_message[MAXMSG];
 
 
     //Receive a message from client
@@ -92,20 +92,27 @@ void *connection_handler(void *socket_desc)
     {
         //Send the message back to client
         std::string content(client_message, strlen(client_message));
-        std::string request_type(content, 0, 1);
-        std::string key(content, 1, content.size()-1);
+        bool request_type;
+        std::string key, val;
+        // get key and val (might be null)
 
-        if (request_type == "P"){
+        if (request_type) { // get
             if (map.find(key) != map.end()) {
-                std::string val = map[key];
+                val = map[key];
                 strcpy(message, val.c_str());
                 write(sock , message , strlen(client_message));
             }
             else {
-                
+                strcpy(message, "Key error: no such key");
+                write(sock , message , strlen(client_message));
             }
         }
+        else { // put
+            map[key] = val;
+            strcpy(message, "Put success");
+            write(sock , message , strlen(client_message));
 
+        }
     }
 
     if(read_size == 0)
